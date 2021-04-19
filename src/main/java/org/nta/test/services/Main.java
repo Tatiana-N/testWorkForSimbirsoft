@@ -36,7 +36,6 @@ public class Main {
         read.read();
         Map<String, Integer> map = read.getMap();
         saverImpl.saveToDB(map);
-        System.out.println(map.size());
         saverImpl.getFromDB();
     }
 }

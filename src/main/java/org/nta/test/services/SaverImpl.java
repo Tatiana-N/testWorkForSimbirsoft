@@ -41,7 +41,7 @@ public class SaverImpl implements Saver<String> {
     public void getFromDB() {
         LOGGER.info("Читаем из базы данных");
         Iterable<Words> all = crudRepository.findAll();
-        all.forEach(t -> System.out.println(t.getString() + " " + t.getCount()));
+        all.forEach(t -> System.out.format("%s%-20s%s%5d%s", "|   ", t.getString(), "|", t.getCount(), "\n"));
 
     }
 }

@@ -17,14 +17,14 @@ import java.util.*;
 @Getter
 @Setter
 @Component
-public class Read_From_Url_Runner implements Reader<String> {
+public class ReadFromUrlRunner implements Reader<String> {
     List<String> list;
-    private static final Logger LOGGER = MyLogger.getMyLogger(Read_From_Url_Runner.class);
+    private static final Logger LOGGER = MyLogger.getMyLogger(ReadFromUrlRunner.class);
     Splittable<String, Integer> splitter;
     URL url;
     Map<String, Integer> map;
 
-    public Read_From_Url_Runner(Splittable<String, Integer> splitter) {
+    public ReadFromUrlRunner(Splittable<String, Integer> splitter) {
         this.splitter = splitter;
         list = new ArrayList<>(Arrays.asList("style", "script"));
         LOGGER.info("Создали reader url");
@@ -38,7 +38,10 @@ public class Read_From_Url_Runner implements Reader<String> {
         StringBuilder sb = new StringBuilder();
         try (BufferedReader r = new BufferedReader(new InputStreamReader(url.openStream()))) {
             while (true) {
-                if ((string = r.readLine()).trim().startsWith("<body")) break;
+                string = r.readLine().trim();
+                if (string.startsWith("<body")) {
+                    break;
+                }
                 // пропускаем head
             }
             while (string != null) {
@@ -58,7 +61,7 @@ public class Read_From_Url_Runner implements Reader<String> {
                         sb = new StringBuilder();
                     }
                 }
-                    map.putAll(splitter.split(string));
+                map.putAll(splitter.split(string));
                 string = r.readLine();
             }
         } catch (IOException e) {
