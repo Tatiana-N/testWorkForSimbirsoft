@@ -41,12 +41,13 @@ class SplitterTest {
     @Autowired
     private WordRepo wordRepo;
     @Autowired
-    private CrudRepository<Words,Integer> crudRepository;
+    private CrudRepository<Words, Integer> crudRepository;
 
     @BeforeAll
     public static void startServer() throws SQLException {
         Server.createTcpServer().start();
     }
+
     @Test
     public void get() {
         Words words = new Words();
@@ -76,24 +77,17 @@ class SplitterTest {
         String html = "<p>An <a href='https://simbirsoft.com'><b>example</b></a> link.</p>";
         Document doc = Jsoup.connect("https://simbirsoft.com").get();
         String textContents = doc.select("a").text();
-        // Document doc = Jsoup.parse(html);
         String text = doc.body().text();
         Splitter splitter = new Splitter();
         Map<String, Integer> split = splitter.split(text);
         Map<String, Integer> split2 = splitter.split(textContents);
-        // split.entrySet().forEach(System.out::println);
         System.out.println(split.size());
         System.out.println(split2.size());
         check(split);
-        // "An example link"
-
     }
 
     @Test
     public void my() throws Exception {
-        //  System.out.println(Runtime.getRuntime().freeMemory() / 1048576);
-        long usedBytes = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
-        //   System.out.println(usedBytes / 1048576);
         URL yahoo = new URL("https://www.simbirsoft.com/");
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(
@@ -101,32 +95,22 @@ class SplitterTest {
 
         String inputLine;
         StringBuilder stringBuilder = new StringBuilder();
-        //char [] chars = new char[30];
         while ((inputLine = in.readLine()) != null) {
 
             stringBuilder.append(inputLine).append("\n");
-            // usedBytes = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-            //    System.out.println(Runtime.getRuntime().freeMemory() / 1048576);
         }
-        //usedBytes = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-        //   System.out.println(Runtime.getRuntime().freeMemory() / 1048576);
+
         in.close();
 
         String s = stringBuilder.toString();
-        //  System.out.println(stringBuilder.toString());
-        String substring = stringBuilder.toString().substring(stringBuilder.toString().indexOf("<body"));
+        String substring = stringBuilder.substring(stringBuilder.toString().indexOf("<body"));
         String replaceAll = substring
                 .replaceAll("(?s)<!--.+?-->|<script.+?</script>|<.+?>", "")
                 .replaceAll("&nbsp;|  +", " ")
                 .replaceAll("\r\n ", "\r\n")
                 .replaceAll("[\r\n\t]+", "\r\n");
-        //   System.out.println(replaceAll);
         Splitter splitter = new Splitter();
-        Map<String, Integer> words = splitter.split(replaceAll);
-        //  words.entrySet().forEach(System.out::println);
-        //Assertions.assertEquals(711, words.size());
-        // System.out.println(Runtime.getRuntime().freeMemory() / 1048576);
-//        Assertions.assertEquals(286, words.values().stream().mapToInt(integer -> integer).sum());
+
     }
 
     public Map<String, Integer> withStringsCopy() {
@@ -354,14 +338,10 @@ class SplitterTest {
                 "ISO 9001:2015\n" +
                 "      ";
         Splitter splitter = new Splitter();
-        Map<String, Integer> split = splitter.split(testString.replaceAll("(?s)<!--.+?-->|<script.+?</script>|<.+?>", "")
+        return splitter.split(testString.replaceAll("(?s)<!--.+?-->|<script.+?</script>|<.+?>", "")
                 .replaceAll("&nbsp;| +", " ")
                 .replaceAll("\r\n ", "\r\n")
                 .replaceAll("[\r\n\t]+", "\r\n"));
-        // split.entrySet().forEach(System.out::println);
-        System.out.println(split.size());
-        //    System.out.println(split.get("РАЗРАБОТКА"));
-        return split;
     }
 
     @Test
@@ -373,35 +353,7 @@ class SplitterTest {
         read.setUrl(url);
         read.read();
         Map<String, Integer> map = read.getMap();
-
-
-        // System.out.println(sb.toString());
-        //map.entrySet().forEach(System.out::println);
-        System.out.println(map.size());
-        System.out.println(map.get("РАЗРАБОТКА"));
-        System.out.println(map.get("РАЗРАБОТКЕ"));
-        System.out.println(map.get("РАЗРАБОТКИ"));
-        System.out.println(map.get("ЦИКЛ"));
-        System.out.println(map.get("НЕУДАЧНОЙ"));
-        System.out.println(map.get("ВАКАНСИИ"));
         check(map);
-//        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-//            if(!map1.containsKey(entry.getKey())){
-//                System.out.println(entry.getKey());
-//            }
-//        }
-//        System.out.println("----------------------------------------------");
-//        for (Map.Entry<String, Integer> entry : map1.entrySet()) {
-//            if(!map.containsKey(entry.getKey())){
-//                System.out.println(entry.getKey());
-//            }
-//        }
-        /* return sb.toString().replaceAll("(?s)<!--.+?-->|<script.+?</script>|<.+?>", "")
-                .replaceAll("&nbsp;| +", " ")
-                .replaceAll("\r\n ", "\r\n")
-                .replaceAll("[\r\n\t]+", "\r\n");
-*/
-
     }
 
     public void check(Map<String, Integer> map) {
@@ -430,8 +382,6 @@ class SplitterTest {
         Splitter splitter = new Splitter();
         Map<String, Integer> split = splitter.split(substring);
         split.entrySet().forEach(System.out::println);
-        //System.out.println(split.size());
-
 
     }
 }
