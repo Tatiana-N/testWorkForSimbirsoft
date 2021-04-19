@@ -1,7 +1,6 @@
-# testWorkForSimbirsoft
-
-[![Build Status](https://travis-ci.org/Tatiana-N/testWorkForSimbirsoft.svg?branch=master)](https://travis-ci.org/Tatiana-N/testWorkForSimbirsoft)
-[![codecov](https://codecov.io/gh/Tatiana-N/testWorkForSimbirsoft/branch/main/graph/badge.svg?token=9VHTOH6W3J)](https://codecov.io/gh/Tatiana-N/testWorkForSimbirsoft)
+# Parse Website for Simbirsoft
+[![Build Status](https://travis-ci.com/Tatiana-N/testWorkForSimbirsoft.svg?branch=master)](https://travis-ci.com/Tatiana-N/testWorkForSimbirsoft)
+[![codecov](https://codecov.io/gh/Tatiana-N/testWorkForSimbirsoft/branch/main/graph/badge.svg?token=LmziSXBNkv)](https://codecov.io/gh/Tatiana-N/testWorkForSimbirsoft)
 
 
 ## Create with
