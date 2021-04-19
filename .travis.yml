@@ -5,9 +5,6 @@ jdk:
 services:
   - postgresql
 
-before_install:
-  - psql -c 'create database if not exists postgres;' -U postgres
-
 # используем режим обычного пользователя для сборки проекта.
 sudo: false
 
@@ -16,7 +13,6 @@ sudo: false
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 # отпрвлять уведомление на почту tanuskanikolaeva@mail.ru если сборка упала
-
 
 notifications:
   email:
