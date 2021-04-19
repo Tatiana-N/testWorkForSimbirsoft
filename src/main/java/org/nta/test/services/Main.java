@@ -1,12 +1,12 @@
-package org.nta.test.nopac;
+package org.nta.test.services;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.nta.test.api.Splittable;
 import org.apache.log4j.Logger;
+import org.nta.test.api.Reader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,9 @@ public class Main {
 
     private static final Logger LOGGER = MyLogger.getMyLogger(Main.class);
     @Autowired
-    private Saver saver;
+    private SaverImpl saverImpl;
     @Autowired
-    private Read_From_Url_Runner read;
+    private Reader<String> read;
 
     public Main() {
     }
@@ -28,14 +28,15 @@ public class Main {
         URL url = null;
         try {
             url = new URL(scanner.nextLine());
+            LOGGER.info("Сайт из которого получаем текст : " + url.toString());
         } catch (MalformedURLException e) {
             LOGGER.warn(e);
         }
         read.setUrl(url);
         read.read();
         Map<String, Integer> map = read.getMap();
-        saver.saveToDB(map);
+        saverImpl.saveToDB(map);
         System.out.println(map.size());
-        saver.getFromDB();
+        saverImpl.getFromDB();
     }
 }

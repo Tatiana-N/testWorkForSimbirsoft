@@ -1,4 +1,4 @@
-package org.nta.test;//import org.nta.dao.DaoWord;
+package org.nta.test;
 
 
 import org.h2.tools.Server;
@@ -7,17 +7,15 @@ import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.nta.test.dao.DaoWord;
 import org.nta.test.model.Words;
-import org.nta.test.nopac.Read_From_Url_Runner;
-import org.nta.test.nopac.Splitter;
-import org.nta.test.repo.WordRepo;
+import org.nta.test.services.Read_From_Url_Runner;
+import org.nta.test.api.Reader;
+import org.nta.test.services.Splitter;
+import org.nta.test.repository.WordRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.support.TransactionTemplate;
 
 
@@ -29,13 +27,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.function.Consumer;
 
 @SpringBootTest
 @EntityScan("org.nta")
 class SplitterTest {
-    @Autowired
-    DaoWord daoWord;
+
     @Autowired
     private EntityManager entityManager;
     @Autowired
@@ -45,7 +41,7 @@ class SplitterTest {
     @Autowired
     private WordRepo wordRepo;
     @Autowired
-    private CrudRepository<Words,Long> crudRepository;
+    private CrudRepository<Words,Integer> crudRepository;
 
     @BeforeAll
     public static void startServer() throws SQLException {
@@ -61,7 +57,6 @@ class SplitterTest {
         wordRepo.save(words);
         words.setString("third");
         crudRepository.save(words);
-        //JdbcTestUtils.deleteFromTables(new JdbcTemplate(dataSource), "words");
     }
 
 
@@ -374,7 +369,7 @@ class SplitterTest {
 
         Splitter splitter = new Splitter();
         URL url = new URL("https://www.simbirsoft.com/");
-        Read_From_Url_Runner read = new Read_From_Url_Runner(splitter);
+        Reader<String> read = new Read_From_Url_Runner(splitter);
         read.setUrl(url);
         read.read();
         Map<String, Integer> map = read.getMap();
@@ -432,7 +427,6 @@ class SplitterTest {
                 .replaceAll("&nbsp;|  +", " ")
                 .replaceAll("\r\n ", "\r\n")
                 .replaceAll("[\r\n\t]+", "\r\n");
-        ;
         Splitter splitter = new Splitter();
         Map<String, Integer> split = splitter.split(substring);
         split.entrySet().forEach(System.out::println);

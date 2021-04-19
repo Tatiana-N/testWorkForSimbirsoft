@@ -1,10 +1,10 @@
-package org.nta.test.nopac;
+package org.nta.test.services;
 
 import lombok.Setter;
+import org.nta.test.api.Reader;
 import org.nta.test.api.Splittable;
 import lombok.Getter;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -17,26 +17,28 @@ import java.util.*;
 @Getter
 @Setter
 @Component
-public class Read_From_Url_Runner<T> {
+public class Read_From_Url_Runner implements Reader<String> {
     List<String> list;
     private static final Logger LOGGER = MyLogger.getMyLogger(Read_From_Url_Runner.class);
-    Splittable <T,Integer> splitter;
+    Splittable<String, Integer> splitter;
     URL url;
-    Map<T, Integer> map;
+    Map<String, Integer> map;
 
-    public Read_From_Url_Runner(Splittable<T,Integer> splitter) {
+    public Read_From_Url_Runner(Splittable<String, Integer> splitter) {
         this.splitter = splitter;
         list = new ArrayList<>(Arrays.asList("style", "script"));
         LOGGER.info("Создали reader url");
     }
 
+    @Override
     public void read() {
         LOGGER.info("читаем со страницы");
         map = new HashMap<>();
         String string;
         StringBuilder sb = new StringBuilder();
         try (BufferedReader r = new BufferedReader(new InputStreamReader(url.openStream()))) {
-            while (!(string = r.readLine()).trim().startsWith("<body")) {
+            while (true) {
+                if ((string = r.readLine()).trim().startsWith("<body")) break;
                 // пропускаем head
             }
             while (string != null) {
@@ -56,14 +58,7 @@ public class Read_From_Url_Runner<T> {
                         sb = new StringBuilder();
                     }
                 }
-                String str = string.replaceAll("(?s)<!--.+?-->|<script.+?</script>|<.+?>", "")
-                        .replaceAll("&nbsp;| +", " ")
-                        .replaceAll("\t ", " ")
-                        .replaceAll("\n ", " ")
-                        .replaceAll("\r ", " ");
-                if (!str.trim().equals("")) {
-                    map.putAll( splitter.split(str));
-                }
+                    map.putAll(splitter.split(string));
                 string = r.readLine();
             }
         } catch (IOException e) {

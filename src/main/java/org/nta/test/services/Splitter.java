@@ -1,6 +1,5 @@
-package org.nta.test.nopac;
+package org.nta.test.services;
 
-import lombok.NoArgsConstructor;
 import org.nta.test.api.Splittable;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -10,16 +9,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 @Component
 public class Splitter implements Splittable<String, Integer> {
-    Map<String, Integer> words = new HashMap<>();;
+    Map<String, Integer> words = new HashMap<>();
     private static final Logger LOGGER = MyLogger.getMyLogger(Splitter.class);
 
     public Splitter() {
-       // words =
-     LOGGER.info("Создан объект Splitter");
+        LOGGER.info("Создан объект Splitter");
     }
 
     @Override
     public Map<String, Integer> split(String text) {
+        text = regex(text);
         Pattern pattern = Pattern.compile("\\w+", Pattern.UNICODE_CHARACTER_CLASS);
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()) {
@@ -35,5 +34,13 @@ public class Splitter implements Splittable<String, Integer> {
             }
         }
         return words;
+    }
+
+    private String regex(String string) {
+        return string.replaceAll("(?s)<!--.+?-->|<script.+?</script>|<.+?>", "")
+                .replaceAll("&nbsp;| +", " ")
+                .replaceAll("\t ", " ")
+                .replaceAll("\n ", " ")
+                .replaceAll("\r ", " ").trim();
     }
 }

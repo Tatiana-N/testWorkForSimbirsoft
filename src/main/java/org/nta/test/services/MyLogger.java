@@ -1,17 +1,13 @@
-package org.nta.test.nopac;
+package org.nta.test.services;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.logging.LogManager;
 
 @Getter
-@Component
-@NoArgsConstructor
 public class MyLogger {
     public static <T> Logger getMyLogger(Class<T> tClass) {
         try {

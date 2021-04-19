@@ -1,7 +1,8 @@
-package org.nta.test.nopac;
+package org.nta.test.services;
 
 import org.apache.log4j.Logger;
 import org.h2.tools.Server;
+import org.nta.test.api.Saver;
 import org.nta.test.model.Words;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -11,21 +12,21 @@ import java.sql.SQLException;
 import java.util.Map;
 
 @Component
-public class Saver {
+public class SaverImpl implements Saver<String> {
     private static final Logger LOGGER = MyLogger.getMyLogger(Main.class);
     @Autowired
-    private CrudRepository<Words, Long> crudRepository;
+    private CrudRepository<Words, Integer> crudRepository;
 
-    public Saver() {
+    public SaverImpl() {
         LOGGER.info("Создан Saver");
         try {
             Server.createTcpServer().start();
         } catch (SQLException throwable) {
             LOGGER.warn(throwable);
         }
-        // this.crudRepository = run.getBean(CrudRepository.class);
     }
 
+    @Override
     public void saveToDB(Map<String, Integer> map) {
         LOGGER.info("Сохраняем в базу");
         for (String s : map.keySet()) {
@@ -36,6 +37,7 @@ public class Saver {
         }
     }
 
+    @Override
     public void getFromDB() {
         LOGGER.info("Читаем из базы данных");
         Iterable<Words> all = crudRepository.findAll();
